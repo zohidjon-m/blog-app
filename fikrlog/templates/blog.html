@@ -9,7 +9,7 @@
     <h3>Mening maqolalarim</h3>
 
     {% for slug, article in articles.items() %}
-    <a href="/blog/{{slug}}">{{article}}</a><br>
+    <a href="/blog/{{slug}}">{{article.title}}</a><br>
     {% endfor %}
 
     <br>
