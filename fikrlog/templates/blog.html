@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fikrlog</title>
+</head>
+<body>
+    <h3>Mening maqolalarim</h3>
+
+    {% for slug, article in articles.items() %}
+    <a href="/blog/{{slug}}">{{article}}</a><br>
+    {% endfor %}
+
+    <br>
+    <a href="/new_article.html">Write a new article</a>
+</body>
+</html>
