@@ -1,4 +1,5 @@
 import hashlib
+import sqlite3
 from flask import (
     Flask,
     render_template, 
@@ -8,9 +9,11 @@ from flask import (
     redirect
 )
 from article import Article
+from users import user
 app = Flask(__name__)
 
 articles = Article.all()
+user = user()
 app.secret_key = "zohidjon"
 
 users = {
@@ -53,7 +56,7 @@ def admin_login():
 @app.get("/logout")
 def logout():
     del session["user"]
-    return "loged out"
+    return ""
     
     
 @app.route("/blog/<slug>")
@@ -79,9 +82,27 @@ def published():
         file.write(content)
 
     return "Submitted"
-
-
-
+@app.get("/subscribe")
+def subscribe_page():
+    return render_template("subscribe.html")
+@app.post("/subscribe")
+def subscribme():
+    name = request.form["name"]
+    email = request.form["email"]
+   
+    
+    try:
+        con = sqlite3.connect("tutorial.db")
+        cur = con.cursor()
+        cur.execute("INSERT  INTO user_information(name, email) VALUES(?,?)",( name, email))
+        con.commit()
+        cur.close()
+        con.close()
+        return f"User {name} has successfully subscribed"
+    except sqlite3.IntegrityError:
+        return f"This {email} already registered"
+        
+        
 # @app.route("/set-session")
 # def set_session():
 #     session["user_id"] = 54
