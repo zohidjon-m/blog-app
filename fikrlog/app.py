@@ -9,6 +9,7 @@ from flask import (
     redirect
 )
 from article import Article
+from sender import sendEmail
 from users import user
 app = Flask(__name__)
 
@@ -56,7 +57,7 @@ def admin_login():
 @app.get("/logout")
 def logout():
     del session["user"]
-    return ""
+    return render_template("main.html")
     
     
 @app.route("/blog/<slug>")
@@ -80,6 +81,8 @@ def published():
     
     with open(file_path, 'w') as file:
         file.write(content)
+    
+    sendEmail(title, content)
 
     return "Submitted"
 @app.get("/subscribe")
@@ -103,26 +106,6 @@ def subscribme():
         return f"This {email} already registered"
         
         
-# @app.route("/set-session")
-# def set_session():
-#     session["user_id"] = 54
-#     return "session set"
-
-# @app.route("/get-session")
-# def get_session():
-#     return f"user_id = {session['user_id']}"
-
-# @app.route("/first-time")
-# def first_time():
-#     if 'seen' not in request.cookies:
-#        response = make_response("you are new here")
-#        response.set_cookie("seen", "1")
-#        return response
-   
-#     seen = int(request.cookies["seen"])
-#     response = make_response(f"I have seen you before {seen} times")
-#     response.set_cookie("seen", str(seen+1))
-#     return response
 
 if __name__ == "__main__":
     app.run(port=4444, debug=True)
